@@ -10,7 +10,6 @@ import base64
 
 
 import tempfile
-import cv2
 import numpy as np
 import torch
 import streamlit as st
@@ -409,33 +408,41 @@ original_path = temp_dir / "original.png"
 image.save(original_path)
 gradcam_path = temp_dir / "gradcam.png"
 
-cv2.imwrite(
-    str(gradcam_path),
-    cv2.cvtColor(
-        heatmap,
-        cv2.COLOR_RGB2BGR
-    )
-)
-
+# cv2.imwrite(
+#     str(gradcam_path),
+#     cv2.cvtColor(
+#         heatmap,
+#         cv2.COLOR_RGB2BGR
+#     )
+# )
+Image.fromarray(heatmap).save(gradcam_path)
 mask_path = temp_dir / "mask.png"
 
-cv2.imwrite(
-    str(mask_path),
-    predicted_mask
-)
+Image.fromarray(predicted_mask).save(mask_path)
 
-overlay_uint8 = (
-    overlay * 255
-).astype(np.uint8)
+# cv2.imwrite(
+#     str(mask_path),
+#     predicted_mask
+# )
 
+# overlay_uint8 = (
+#     overlay * 255
+# ).astype(np.uint8)
+
+# overlay_path = temp_dir / "overlay.png"
+# cv2.imwrite(
+#     str(overlay_path),
+#     cv2.cvtColor(
+#         overlay_uint8,
+#         cv2.COLOR_RGB2BGR
+#     )
+# )
+
+overlay_uint8 = (overlay * 255).astype(np.uint8)
 overlay_path = temp_dir / "overlay.png"
-cv2.imwrite(
-    str(overlay_path),
-    cv2.cvtColor(
-        overlay_uint8,
-        cv2.COLOR_RGB2BGR
-    )
-)
+Image.fromarray(overlay_uint8).save(overlay_path)
+
+
 pdf_buffer = create_pdf_report(
     prediction_name=prediction_name,
     confidence= confidence,
