@@ -8,14 +8,14 @@ from pathlib import Path
 import sys
 import base64
 
-from utils.download_models import ensure_models_exist
+
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
-
+from utils.download_models import ensure_models_exist
 import tempfile
 import cv2
-from pdf_report import create_pdf_report
+from streamlit_app.pdf_report import create_pdf_report
 
 import numpy as np
 import torch
