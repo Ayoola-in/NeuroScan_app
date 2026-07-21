@@ -7,9 +7,13 @@ AI-Powered Brain Tumor Classification System
 from pathlib import Path
 import sys
 import base64
-
-
 import tempfile
+
+# Add project root to Python path
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
 import numpy as np
 import torch
 import streamlit as st
@@ -17,24 +21,21 @@ from PIL import Image
 import albumentations as A
 from albumentations.pytorch import ToTensorV2
 
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(PROJECT_ROOT))
-from streamlit_app.pdf_report import create_pdf_report
+# Project imports
 from utils.download_models import ensure_models_exist
 import classifier.config
 from classifier.dataset import get_transforms
 from classifier.gradcam import GradCAMGenerator
 from classifier.model import create_model
 from classifier.utils import load_checkpoint
+
 import segmentation.config as seg_config
 from segmentation.model import create_model as create_unet
+from segmentation.dataset import get_val_transform
+from segmentation.train import load_model as load_unet_model
 
-from segmentation.dataset import (
-    get_val_transform
-)
-from segmentation.train import (
-    load_model as load_unet_model
-)
+from pdf_report import create_pdf_report
+
 
 temp_dir = Path(tempfile.gettempdir()) / "neuroscan"
 temp_dir.mkdir(
